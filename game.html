@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<!--Google Chrome-->
+<html>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<head>
+	<title>
+		Homework3: Game
+	</title>
+
+	<style>
+		.page-header {
+			background-color: #99cc00;
+		}
+
+		.btn {
+			color: black;
+			background-color: #99cc00;
+		}
+		.table{
+			background-color: #00cc00;
+			color: black;
+		}
+
+		.bodyClass{
+			background-color: #cccc00;
+		}
+
+	</style>
+
+</head>
+
+
+<body class = "bodyClass">
+
+	<div class="page-header text-center" background-color="red">
+		<h1>Escape the Cave !</h1>
+ 	</div>
+	
+
+	<center>
+		</br>
+		<h2><p id="status"></p></h2>
+		</br>
+	</center>
+
+	<center>
+		<div id = "moveButtons" class="btn-group" role="group" aria-label="...">
+			<center>
+			  <button type="button" class="btn btn-default" onclick="up()">Up</button>
+			</br></br>
+			  <button type="button" class="btn btn-default" onclick="left()">Left</button>
+			  <button type="button" class="btn btn-default" onclick="right()">Right</button>
+			</br></br>
+			  <button type="button" class="btn btn-default" onclick="down()">Down</button>
+			</center>
+		</div>
+	</center>
+
+	<center>
+		<div id = "challengeButtons" class="btn-group" role="group" aria-label="...">
+			<center>
+			</br></br>
+			  <button type="button" class="btn btn-default" id="fight" >Fight</button>
+			  <button type="button" class="btn btn-default" id="runAway" >Run Away</button>
+			</br></br>
+			</center>
+		</div>
+	</center>
+
+	<center>
+		<div id = "challengeButtons2" class="btn-group" role="group" aria-label="...">
+			<center>
+			</br></br>
+			  <button type="button" class="btn btn-default" id="fight2" >Fight</button>
+			  <button type="button" class="btn btn-default" id="runAway2" >Run Away</button>
+			</br></br>
+			</center>
+		</div>
+	</center>
+
+	<center>
+		<div id = "challengeButtons3" class="btn-group" role="group" aria-label="...">
+			<center>
+			</br></br>
+			  <button type="button" class="btn btn-default" id="fight3" >Fight</button>
+			  <button type="button" class="btn btn-default" id="runAway3" >Run Away</button>
+			</br></br>
+			</center>
+		</div>
+	</center>
+	</br>
+
+	<div class = "container">
+		</br>
+			<p>
+				Hit Points: <span id = 'userHitPoints'></span></br>
+				Location: (<span id = 'userY'></span>,<span id = 'userX'></span>)</br>
+				Prizes: <span id = 'userPrizes'></span></br>
+			</p>
+		</br>
+	</div>
+
+	<div class = "container theTable">
+		<table class="table table-bordered">
+			<tr><td id='00'></td><td id='01'></td><td id='02'></td><td id='03'></td><td id='04'></td><td id='05'></td><td id='06'></td><td id='07'></td></tr>
+			<tr><td id='10'></td><td id='11'></td><td id='12'></td><td id='13'></td><td id='14'></td><td id='15'></td><td id='16'></td><td id='17'></td></tr>
+			<tr><td id='20'></td><td id='21'></td><td id='22'></td><td id='23'></td><td id='24'></td><td id='25'></td><td id='26'></td><td id='27'></td></tr>
+			<tr><td id='30'></td><td id='31'></td><td id='32'></td><td id='33'></td><td id='34'></td><td id='35'></td><td id='36'></td><td id='37'></td></tr>
+			<tr><td id='40'></td><td id='41'></td><td id='42'></td><td id='43'></td><td id='44'></td><td id='45'></td><td id='46'></td><td id='47'></td></tr>
+			<tr><td id='50'></td><td id='51'></td><td id='52'></td><td id='53'></td><td id='54'></td><td id='55'></td><td id='56'></td><td id='57'></td></tr>
+			<tr><td id='60'></td><td id='61'></td><td id='62'></td><td id='63'></td><td id='64'></td><td id='65'></td><td id='66'></td><td id='67'></td></tr>
+			<tr><td id='70'></td><td id='71'></td><td id='72'></td><td id='73'></td><td id='74'></td><td id='75'></td><td id='76'></td><td id='77'></td></tr>
+		</table>
+	</div>
+
+	<div>
+		<script
+		  src="https://code.jquery.com/jquery-3.2.1.js"
+		  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+		  crossorigin="anonymous">
+		</script>
+
+		<script>
+			$(document).ready(function() {
+
+				var empty0 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty1 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty2 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty3 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty4 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty5 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty6 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty7 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty8 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty9 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty10 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty11 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty12 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty13 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty14 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty15 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty16 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty17 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty18 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty19 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};		
+				var empty20 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty21 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty22 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty23 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty24 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty25 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty26 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty27 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty28 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty29 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};		
+				var empty30 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty31 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty32 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty33 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty34 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty35 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty36 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty37 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty38 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty39 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};		
+				var empty40 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty41 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty42 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty43 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty44 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty45 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty46 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty47 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};				
+				var empty48 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty49 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty50 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var empty51 = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var emptyA = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var emptyB = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var emptyC = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+				var emptyD = {name:"e",walked:false,pass:true,obsticle:function(){this.walked = true;$("#status").text("You've entered safely");}};
+
+				var prize1 = {
+					name:"p",
+					walked:false,
+					pass:true,
+					obsticle:function(){
+						if(!this.walked){
+							this.walked = true;
+							$("#status").text("You've won a prize: Rope");
+							adventurer.userPrizes.push("Rope");
+						}
+						else{
+							$("#status").text("You already collected the prize. Find another!");
+						}
+					}
+				};
+				var prize2 = {
+					name:"p",
+					walked:false,
+					pass:true,
+					obsticle:function(){
+						if(!this.walked){
+							this.walked = true;
+							$("#status").text("You've won a prize: Torch");
+							adventurer.userPrizes.push("Torch");
+						}
+						else{
+							$("#status").text("You already collected the prize. Find another!");
+						}
+					}
+				};
+
+				var wall1 = {
+					name:"w",
+					walked:false,
+					pass:false,
+					obsticle:function(){
+						this.walked = true;
+						$("#status").text("There are sharp rocks, you can't go there.");
+					}
+				};
+				var wall2 = {
+					name:"w",
+					walked:false,
+					pass:false,
+					obsticle:function(){
+						this.walked = true;
+						$("#status").text("There is a deep lake. You can't go there.");
+					}
+				};
+				var wall3 = {
+					name:"w",
+					walked:false,
+					pass:false,
+					obsticle:function(){
+						this.walked = true;
+						$("#status").text("There is a wall of spiders and ain't no body got time for that.");
+					}
+				};
+
+				var challenge1 = {
+					name:"c",
+					walked:false,
+					pass:false,
+					lifePoints:50,
+					challenge: "snake",
+					obsticle: function(){
+						this.walked = true;
+						if(this.pass){
+							$("#status").text("You already won against the"+challenge1.challenge+"!");
+						}
+						else{
+							$("#moveButtons").hide();
+							$("#challengeButtons").show();
+							$("#status").text("There's a "+challenge1.challenge+"! Fight or run away?");
+
+							$("#fight").click(function(){
+								var challenge = challenge1.challenge;
+								if( (challenge1.lifePoints>0) && (!challenge1.pass) ){
+									var option = Math.floor((Math.random() * 7) + 0);
+									if(option > 4){
+										$("#status").text("The "+challenge+" attacked! You lose 5 life points!");
+										adventurer.userHitPoints = adventurer.userHitPoints - 5;
+									}
+									else{
+										$("#status").text("You attacked the "+challenge+"! "+challenge+" loses 5 life points!");
+										challenge1.lifePoints = challenge1.lifePoints - 5;
+										if(challenge1.lifePoints<=0){
+											$("#status").text("You've won and got a prize: Antidote");
+											adventurer.userPrizes.push("Antidote");
+											challenge1.pass = true;
+											$("#moveButtons").show();
+											$("#challengeButtons").hide();
+										}
+									}
+									drawTable();
+								}
+								else{
+									$("#status").text("You've won against the "+challenge+"!");
+									$("#moveButtons").show();
+									$("#challengeButtons").hide();
+									drawTable();
+								}
+							});
+							$("#runAway").click(function(){
+								$("#status").text("You avoided the snake.");
+								$("#moveButtons").show();
+								$("#challengeButtons").hide();
+								drawTable();
+							});
+						};
+					}
+				};
+
+				var challenge2 = {
+					name:"c",
+					walked:false,
+					pass:false,
+					lifePoints:50,
+					challenge: "bat",
+					obsticle: function(){
+						this.walked = true;
+						if(this.pass){
+							$("#status").text("You already won against the"+challenge2.challenge+"!");
+						}
+						else{
+							$("#moveButtons").hide();
+							$("#challengeButtons2").show();
+							$("#status").text("There's a "+challenge2.challenge+"! Fight or run away?");
+
+							$("#fight2").click(function(){
+								var challenge = challenge2.challenge;
+								if( (challenge2.lifePoints>0) && (!challenge2.pass) ){
+									var option = Math.floor((Math.random() * 7) + 0);
+									if(option > 4){
+										$("#status").text("The "+challenge+" attacked! You lose 5 life points!");
+										adventurer.userHitPoints = adventurer.userHitPoints - 5;
+									}
+									else{
+										$("#status").text("You attacked the "+challenge+"! "+challenge+" loses 5 life points!");
+										challenge2.lifePoints = challenge2.lifePoints - 5;
+										if(challenge2.lifePoints<=0){
+											$("#status").text("You've won and got a prize: Sonar");
+											adventurer.userPrizes.push("Sonar");
+											challenge2.pass = true;
+											$("#moveButtons").show();
+											$("#challengeButtons2").hide();
+										}
+									}
+									drawTable();
+								}
+								else{
+									$("#status").text("You've won against the "+challenge+"!");
+									$("#moveButtons").show();
+									$("#challengeButtons2").hide();
+									drawTable();
+								}
+							});
+							$("#runAway2").click(function(){
+								$("#status").text("You avoided the bat.");
+								$("#moveButtons").show();
+								$("#challengeButtons2").hide();
+								drawTable();
+							});
+						};
+					}
+				};
+				var challenge3 = {
+					name:"c",
+					walked:false,
+					pass:false,
+					lifePoints:50,
+					challenge: "bear",
+					obsticle: function(){
+						this.walked = true;
+						if(this.pass){
+							$("#status").text("You already won against the"+challenge3.challenge+"!");
+						}
+						else{
+							$("#moveButtons").hide();
+							$("#challengeButtons3").show();
+							$("#status").text("There's a "+challenge3.challenge+"! Fight or run away?");
+
+							$("#fight3").click(function(){
+								var challenge = challenge3.challenge;
+								if( (challenge3.lifePoints>0) && (!challenge3.pass) ){
+									var option = Math.floor((Math.random() * 7) + 0);
+									if(option > 4){
+										$("#status").text("The "+challenge+" attacked! You lose 5 life points!");
+										adventurer.userHitPoints = adventurer.userHitPoints - 5;
+									}
+									else{
+										$("#status").text("You attacked the "+challenge+"! "+challenge+" loses 5 life points!");
+										challenge3.lifePoints = challenge3.lifePoints - 5;
+										if(challenge3.lifePoints<=0){
+											$("#status").text("You've won and got a prize: Branches");
+											adventurer.userPrizes.push("Branches");
+											challenge3.pass = true;
+											$("#moveButtons").show();
+											$("#challengeButtons3").hide();
+										}
+									}
+									drawTable();
+								}
+								else{
+									$("#status").text("You've won against the "+challenge+"!");
+									$("#moveButtons").show();
+									$("#challengeButtons3").hide();
+									drawTable();
+								}
+							});
+							$("#runAway2").click(function(){
+								$("#status").text("You avoided the bear.");
+								$("#moveButtons").show();
+								$("#challengeButtons3").hide();
+								drawTable();
+							});
+						};
+					}
+				};
+				var game = [ 
+				[empty0,	empty1,		empty2,		empty3,		empty4,		empty5,		empty6,		empty7],
+				[empty8,	prize1,		wall1,		emptyA,		empty9,		prize2,		challenge1,	empty10],
+				[empty11,	empty12,	empty13,	empty14,	empty15,	empty16,	empty17,	empty18],
+				[empty19,	empty20,	wall2,		emptyB,		empty21,	empty22,	challenge2,	empty24],
+				[empty25,	emptyC,		empty26,	empty27,	empty28,	empty29,	empty23,	empty30],
+				[empty31,	emptyD,		wall3,		empty32,	empty33,	empty34,	challenge3,	empty36],
+				[empty37,	empty38,	empty39,	empty35,	empty40,	empty41,	empty42,	empty43],
+				[empty44,	empty45,	empty46,	empty47,	empty48,	empty49,	empty50,	empty51] 
+				];
+
+				var startX=Math.floor((Math.random() * 7) + 0);
+				var startY=Math.floor((Math.random() * 7) + 0);
+
+				var goalX=Math.floor((Math.random() * 7) + 0);
+				var goalY=Math.floor((Math.random() * 7) + 0);
+
+				while( (game[startX][startY].name != "e") ){
+					startX = Math.floor((Math.random() * 7) + 0);
+					startY = Math.floor((Math.random() * 7) + 0);
+					while( (startX != goalX) && (startY != goalY) ){
+						goalX = Math.floor((Math.random() * 7) + 0);
+						goalY = Math.floor((Math.random() * 7) + 0);
+					}
+				}
+
+				var adventurer = {
+					userHitPoints:100,
+					userX: startX,
+					userY: startY,
+					userPrizes: []
+				};
+
+				drawTable = function(){
+					for(var i = 0; i<game.length; i++){
+						for(var j = 0; j<game[i].length; j++){
+							if( (i == adventurer.userX) && (j == adventurer.userY))
+								$("#" + i + j).text("A");
+							else if( game[i][j].walked  )
+								$("#" + i + j).text(game[i][j].name);
+							else
+								$("#" + i + j).text("");
+						}
+					}
+					$("#userHitPoints").text(adventurer.userHitPoints);
+					$("#userPrizes").text(listOfPrizes);
+					$("#userX").text(adventurer.userX+1);
+					$("#userY").text(adventurer.userY+1);
+				}
+
+				listOfPrizes = function(){
+					var returnString = "[";
+					for(var i = 0; i< adventurer.userPrizes.length; i++){
+						returnString += adventurer.userPrizes[i].toUpperCase() + ",";
+					}
+					returnString += "]";
+					return returnString;
+				}
+
+				drawTable();
+				$("#moveButtons").show();
+				$("#challengeButtons").hide();
+				$("#challengeButtons2").hide();
+				$("#challengeButtons3").hide();
+				$("#status").text("It is dark and you are scared. Escape the cave!");
+
+				testSquare = function(row, collumn){
+					if(row>7 || row<0 ||collumn>7 || collumn<0){
+						$("#status").text("You can't move there, that's the edge of the cave!");
+					}
+
+					var square = game[row][collumn];
+
+					if(square.name=="w"){
+						square.obsticle();
+						drawTable();
+					}
+					if(square.name == "e" || square.name == "p"){
+						square.obsticle();
+						adventurer.userX = row;
+						adventurer.userY = collumn;
+						drawTable();
+					}
+
+					if(square.name == "c"){
+						if(square.pass){
+							adventurer.userX = row;
+							adventurer.userY = collumn;
+							// drawTable();
+						}
+						else{
+							square.obsticle();
+							// drawTable();
+						}
+						if(square.pass){
+							adventurer.userX = row;
+							adventurer.userY = collumn;
+							// drawTable();
+
+						}
+						drawTable();
+					}
+
+					if( (row == goalX) && (collumn == goalY) && (adventurer.userPrizes.length >=2) ) {
+						$("#status").text("You Escaped! You Win!");
+						drawTable();
+						$("#moveButtons").hide();
+						$("#challengeButtons").hide();
+						$("#challengeButtons2").hide();
+						$("#challengeButtons3").hide();
+					}
+					if(adventurer.userHitPoints <=0) {
+						$("#status").text("You lose!");
+						drawTable();
+						$("#moveButtons").hide();
+						$("#challengeButtons").hide();
+						$("#challengeButtons2").hide();
+						$("#challengeButtons3").hide();
+					}
+				}
+
+				right = function(){
+					testSquare(adventurer.userX, adventurer.userY+1);
+				};
+				left = function(){
+					testSquare(adventurer.userX, adventurer.userY-1);
+				};
+				up = function(){
+					testSquare(adventurer.userX-1, adventurer.userY);
+				};
+				down = function(){
+					testSquare(adventurer.userX+1, adventurer.userY);
+				};
+			});
+		</script>
+	</div>
+</body>
+</html>
